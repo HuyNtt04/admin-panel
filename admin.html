@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Quản Lý Phim</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1f2937',
+            secondary: '#4b5563',
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    #sidebar {
+  transition: width 0.3s ease-in-out;
+}
+#sidebar.collapsed {
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+  </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 p-6 space-y-6" id="sidebar">
+      <button onclick="toggleSidebar()" class="text-white mb-4"><i class="fas fa-bars"></i></button>
+      <h2 class="text-xl font-bold text-white">🎬 Admin Phim</h2>
+      <nav class="space-y-3">
+        <a href="dashboard.html" class="block text-blue-400 sidebar-link" data-target="dashboard"><i class="fas fa-tachometer-alt mr-2"></i>Dashboard</a>
+        <div>
+          <button onclick="toggleDropdown()" class="w-full text-left hover:text-blue-400 flex items-center justify-between">
+            <span><i class="fas fa-film mr-2"></i>Quản lý phim</span>
+            <i class="fas fa-chevron-down transition-transform duration-300" id="dropdown-icon"></i>
+          </button>
+          <div id="movie-dropdown" class="ml-4 mt-2 space-y-2 hidden">
+            <a href="singlemovie.html" class="block hover:text-blue-400 sidebar-link" data-target="single-movies"><i class="fas fa-video mr-2"></i>Phim lẻ</a>
+            <a href="tvseries.html" class="block hover:text-blue-400 sidebar-link" data-target="series-movies"><i class="fas fa-tv mr-2"></i>Phim bộ</a>
+          </div>
+        </div>
+        <a href="genre.html" class="block hover:text-blue-400 sidebar-link" data-target="genres"><i class="fas fa-tags mr-2"></i>Thể loại</a>
+        <a href="member.html" class="block hover:text-blue-400 sidebar-link" data-target="manage-membership"><i class="fas fa-tv mr-2"></i>Quản lý hội viên</a>
+        <a href="manageaccount.html" class="block hover:text-blue-400 sidebar-link" data-target="accounts"><i class="fas fa-users mr-2"></i>Tài khoản</a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 overflow-y-auto p-10">
+      <!-- Dashboard Section -->
+      <div id="dashboard" class="section fade-in">
+        <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <div class="bg-gray-800 p-4 rounded-lg shadow">
+            <i class="fas fa-film text-blue-400 text-2xl"></i>
+            <h3 class="text-lg font-semibold mt-2">Total Movies</h3>
+            <p class="text-3xl font-bold">100</p>
+          </div>
+          <div class="bg-gray-800 p-4 rounded-lg shadow">
+            <i class="fas fa-tv text-blue-400 text-2xl"></i>
+            <h3 class="text-lg font-semibold mt-2">Total Series</h3>
+            <p class="text-3xl font-bold">50</p>
+          </div>
+          <div class="bg-gray-800 p-4 rounded-lg shadow">
+            <i class="fas fa-users text-blue-400 text-2xl"></i>
+            <h3 class="text-lg font-semibold mt-2">Total Users</h3>
+            <p class="text-3xl font-bold">1,000</p>
+          </div>
+          <div class="bg-gray-800 p-4 rounded-lg shadow">
+            <i class="fas fa-eye text-blue-400 text-2xl"></i>
+            <h3 class="text-lg font-semibold mt-2">Total Views</h3>
+            <p class="text-3xl font-bold">10,000,000</p>
+          </div>
+        </div>
+        <div class="bg-gray-800 p-6 rounded-lg shadow">
+          <h2 class="text-xl font-semibold mb-4">Viewership Trend</h2>
+          <div class="h-64 bg-gray-700 flex items-center justify-center">Chart goes here</div>
+        </div>
+      </div>
+
+      <!-- Phim lẻ Section -->
+      <div id="single-movies" class="section hidden fade-in">
+        <h1 class="text-3xl font-bold mb-6">Phim lẻ</h1>
+
+        <!-- Form for Adding/Editing Single Movies -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-10 shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Thêm / Sửa phim lẻ</h2>
+          <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block mb-1 font-medium">Tên phim</label>
+              <input type="text" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập tên phim" />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Quốc gia</label>
+              <input type="text" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập quốc gia" />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Thể loại</label>
+              <input type="text" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Hành động, Hài..." />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Link video</label>
+              <input type="text" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="https://..." />
+            </div>
+            <div class="col-span-1 md:col-span-2">
+              <label class="block mb-1 font-medium">Mô tả</label>
+              <textarea rows="3" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập mô tả phim..."></textarea>
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Poster</label>
+              <input type="file" class="w-full p-2 rounded bg-gray-700 text-white" />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Ảnh nền</label>
+              <input type="file" class="w-full p-2 rounded bg-gray-700 text-white" />
+            </div>
+            <div class="col-span-1 md:col-span-2">
+              <button type="submit" class="mt-4 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded font-semibold transition-all duration-300">Lưu phim</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Table for Single Movies -->
+        <div class="bg-gray-800 p-6 rounded-xl shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Danh sách phim lẻ</h2>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-gray-700 text-white">
+                <tr>
+                  <th class="py-2 px-4 text-left">Poster</th>
+                  <th class="py-2 px-4 text-left">Tên phim</th>
+                  <th class="py-2 px-4 text-left">Thể loại</th>
+                  <th class="py-2 px-4 text-left">Quốc gia</th>
+                  <th class="py-2 px-4 text-left">Lượt xem</th>
+                  <th class="py-2 px-4 text-left">Hành động</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-600">
+                <!-- Sample Row 1 -->
+                <tr>
+                  <td class="py-2 px-4">
+                    <img src="https://via.placeholder.com/50x75" alt="Poster" class="w-16 h-24 object-cover rounded">
+                  </td>
+                  <td class="py-2 px-4">Inception</td>
+                  <td class="py-2 px-4">Hành động, Khoa học viễn tưởng</td>
+                  <td class="py-2 px-4">Mỹ</td>
+                  <td class="py-2 px-4">2,500,000</td>
+                  <td class="py-2 px-4">
+                    <button class="text-yellow-400 hover:underline mr-2">Sửa</button>
+                    <button class="text-red-400 hover:underline">Xoá</button>
+                  </td>
+                </tr>
+                <!-- Sample Row 2 -->
+                <tr>
+                  <td class="py-2 px-4">
+                    <img src="https://via.placeholder.com/50x75" alt="Poster" class="w-16 h-24 object-cover rounded">
+                  </td>
+                  <td class="py-2 px-4">The Shawshank Redemption</td>
+                  <td class="py-2 px-4">Drama</td>
+                  <td class="py-2 px-4">Mỹ</td>
+                  <td class="py-2 px-4">1,800,000</td>
+                  <td class="py-2 px-4">
+                    <button class="text-yellow-400 hover:underline mr-2">Sửa</button>
+                    <button class="text-red-400 hover:underline">Xoá</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phim bộ Section -->
+      <div id="series-movies" class="section hidden fade-in">
+        <h1 class="text-3xl font-bold mb-6">Phim bộ</h1>
+
+        <!-- Form for Adding/Editing Movie Series -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-10 shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Thêm / Sửa phim bộ</h2>
+          <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block mb-1 font-medium">Tên phim</label>
+              <input type="text" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập tên phim" />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Quốc gia</label>
+              <input type="text" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập quốc gia" />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Thể loại</label>
+              <input type="text" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Hành động, Hài..." />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Số tập</label>
+              <input type="number" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập số tập" />
+            </div>
+            <div class="col-span-1 md:col-span-2">
+              <label class="block mb-1 font-medium">Mô tả</label>
+              <textarea rows="3" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập mô tả phim..."></textarea>
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Poster</label>
+              <input type="file" class="w-full p-2 rounded bg-gray-700 text-white" />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Ảnh nền</label>
+              <input type="file" class="w-full p-2 rounded bg-gray-700 text-white" />
+            </div>
+            <div class="col-span-1 md:col-span-2">
+              <button type="submit" class="mt-4 bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded font-semibold transition-all duration-300">Lưu phim</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Table for Movie Series -->
+        <div class="bg-gray-800 p-6 rounded-xl shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Danh sách phim bộ</h2>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-gray-700 text-white">
+                <tr>
+                  <th class="py-2 px-4 text-left">Poster</th>
+                  <th class="py-2 px-4 text-left">Tên phim</th>
+                  <th class="py-2 px-4 text-left">Thể loại</th>
+                  <th class="py-2 px-4 text-left">Quốc gia</th>
+                  <th class="py-2 px-4 text-left">Số tập</th>
+                  <th class="py-2 px-4 text-left">Lượt xem</th>
+                  <th class="py-2 px-4 text-left">Hành động</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-600">
+                <!-- Sample Row 1 -->
+                <tr>
+                  <td class="py-2 px-4">
+                    <img src="https://via.placeholder.com/50x75" alt="Poster" class="w-16 h-24 object-cover rounded">
+                  </td>
+                  <td class="py-2 px-4">Stranger Things</td>
+                  <td class="py-2 px-4">Kinh dị, Khoa học viễn tưởng</td>
+                  <td class="py-2 px-4">Mỹ</td>
+                  <td class="py-2 px-4">25</td>
+                  <td class="py-2 px-4">1,000,000</td>
+                  <td class="py-2 px-4">
+                    <button class="text-yellow-400 hover:underline mr-2">Sửa</button>
+                    <button class="text-red-400 hover:underline">Xoá</button>
+                  </td>
+                </tr>
+                <!-- Sample Row 2 -->
+                <tr>
+                  <td class="py-2 px-4">
+                    <img src="https://via.placeholder.com/50x75" alt="Poster" class="w-16 h-24 object-cover rounded">
+                  </td>
+                  <td class="py-2 px-4">The Witcher</td>
+                  <td class="py-2 px-4">Hành động, Phiêu lưu</td>
+                  <td class="py-2 px-4">Ba Lan</td>
+                  <td class="py-2 px-4">16</td>
+                  <td class="py-2 px-4">800,000</td>
+                  <td class="py-2 px-4">
+                    <button class="text-yellow-400 hover:underline mr-2">Sửa</button>
+                    <button class="text-red-400 hover:underline">Xoá</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Placeholder Sections -->
+      <div id="manage-episodes" class="section hidden fade-in">
+        <h1 class="text-3xl font-bold mb-6">Quản lý tập phim</h1>
+        <div class="mb-6">
+          <label class="block mb-1 font-medium">Chọn phim bộ</label>
+          <select class="w-full p-2 rounded bg-gray-700 text-white">
+            <option>Stranger Things</option>
+            <option>The Witcher</option>
+          </select>
+        </div>
+        <div class="bg-gray-800 p-6 rounded-xl mb-10 shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Thêm / Sửa tập phim</h2>
+          <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block mb-1 font-medium">Số tập <span class="text-red-500">*</span></label>
+              <input type="number" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập số tập" required />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Tiêu đề</label>
+              <input type="text" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập tiêu đề" />
+            </div>
+            <div class="col-span-1 md:col-span-2">
+              <label class="block mb-1 font-medium">Link video <span class="text-red-500">*</span></label>
+              <input type="url" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="https://..." required />
+            </div>
+            <div class="col-span-1 md:col-span-2">
+              <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded font-semibold transition-all duration-300">Lưu tập phim</button>
+            </div>
+          </form>
+        </div>
+        <div class="bg-gray-800 p-6 rounded-xl shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Danh sách tập phim</h2>
+          <table class="min-w-full text-sm">
+            <thead class="bg-gray-700 text-white">
+              <tr>
+                <th class="py-2 px-4 text-left">Số tập</th>
+                <th class="py-2 px-4 text-left">Tiêu đề</th>
+                <th class="py-2 px-4 text-left">Lượt xem</th>
+                <th class="py-2 px-4 text-left">Hành động</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-600">
+              <tr>
+                <td class="py-2 px-4">1</td>
+                <td class="py-2 px-4">Chapter One</td>
+                <td class="py-2 px-4">500,000</td>
+                <td class="py-2 px-4">
+                  <button title="Sửa" class="text-yellow-400 hover:text-yellow-500 mr-2"><i class="fas fa-edit"></i></button>
+                  <button title="Xoá" class="text-red-400 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="genres" class="section hidden fade-in">
+        <h1 class="text-3xl font-bold mb-6">Thể loại</h1>
+        <div class="bg-gray-800 p-6 rounded-xl mb-10 shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Thêm / Sửa thể loại</h2>
+          <form class="grid grid-cols-1 gap-6">
+            <div>
+              <label class="block mb-1 font-medium">Tên thể loại <span class="text-red-500">*</span></label>
+              <input type="text" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập tên thể loại" required />
+            </div>
+            <div>
+              <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded font-semibold transition-all duration-300">Lưu thể loại</button>
+            </div>
+          </form>
+        </div>
+        <div class="bg-gray-800 p-6 rounded-xl shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Danh sách thể loại</h2>
+          <table class="min-w-full text-sm">
+            <thead class="bg-gray-700 text-white">
+              <tr>
+                <th class="py-2 px-4 text-left">Tên thể loại</th>
+                <th class="py-2 px-4 text-left">Hành động</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-600">
+              <tr>
+                <td class="py-2 px-4">Hành động</td>
+                <td class="py-2 px-4">
+                  <button title="Sửa" class="text-yellow-400 hover:text-yellow-500 mr-2"><i class="fas fa-edit"></i></button>
+                  <button title="Xoá" class="text-red-400 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="accounts" class="section hidden fade-in">
+        <h1 class="text-3xl font-bold mb-6">Tài khoản</h1>
+        <div class="bg-gray-800 p-6 rounded-xl mb-10 shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Thêm / Sửa tài khoản</h2>
+          <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block mb-1 font-medium">Tên người dùng <span class="text-red-500">*</span></label>
+              <input type="text" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập tên người dùng" required />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Email <span class="text-red-500">*</span></label>
+              <input type="email" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập email" required />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Mật khẩu <span class="text-red-500">*</span></label>
+              <input type="password" class="w-full p-2 rounded bg-gray-700 text-white" placeholder="Nhập mật khẩu" required />
+            </div>
+            <div>
+              <label class="block mb-1 font-medium">Vai trò</label>
+              <select class="w-full p-2 rounded bg-gray-700 text-white">
+                <option>User</option>
+                <option>Admin</option>
+              </select>
+            </div>
+            <div class="col-span-1 md:col-span-2">
+              <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded font-semibold transition-all duration-300">Lưu tài khoản</button>
+            </div>
+          </form>
+        </div>
+        <div class="bg-gray-800 p-6 rounded-xl shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Danh sách tài khoản</h2>
+          <table class="min-w-full text-sm">
+            <thead class="bg-gray-700 text-white">
+              <tr>
+                <th class="py-2 px-4 text-left">Tên người dùng</th>
+                <th class="py-2 px-4 text-left">Email</th>
+                <th class="py-2 px-4 text-left">Vai trò</th>
+                <th class="py-2 px-4 text-left">Hành động</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-600">
+              <tr>
+                <td class="py-2 px-4">admin</td>
+                <td class="py-2 px-4">admin@example.com</td>
+                <td class="py-2 px-4">Admin</td>
+                <td class="py-2 px-4">
+                  <button title="Sửa" class="text-yellow-400 hover:text-yellow-500 mr-2"><i class="fas fa-edit"></i></button>
+                  <button title="Xoá" class="text-red-400 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+  <!-- Section Switching Script + Dropdown -->
+  <script>
+  </script>
+  <Script src="js/highlight.js"></Script>
+</body>
+</html>

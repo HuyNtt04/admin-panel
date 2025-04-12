@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Quản Lý Phim</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1f2937',
+            secondary: '#4b5563',
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    #sidebar {
+  transition: width 0.3s ease-in-out;
+}
+#sidebar.collapsed {
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+  </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 p-6 space-y-6" id="sidebar">
+      <button onclick="toggleSidebar()" class="text-white mb-4"><i class="fas fa-bars"></i></button>
+      <h2 class="text-xl font-bold text-white">🎬 Admin Phim</h2>
+      <nav class="space-y-3">
+        <a href="dashboard.html" class="block text-blue-400 sidebar-link" data-target="dashboard"><i class="fas fa-tachometer-alt mr-2"></i>Dashboard</a>
+        <div>
+          <button onclick="toggleDropdown()" class="w-full text-left hover:text-blue-400 flex items-center justify-between">
+            <span><i class="fas fa-film mr-2"></i>Quản lý phim</span>
+            <i class="fas fa-chevron-down transition-transform duration-300" id="dropdown-icon"></i>
+          </button>
+          <div id="movie-dropdown" class="ml-4 mt-2 space-y-2 hidden">
+            <a href="singlemovie.html" class="block hover:text-blue-400 sidebar-link" data-target="single-movies"><i class="fas fa-video mr-2"></i>Phim lẻ</a>
+            <a href="tvseries.html" class="block hover:text-blue-400 sidebar-link" data-target="series-movies"><i class="fas fa-tv mr-2"></i>Phim bộ</a>
+          </div>
+        </div>
+        <a href="genre.html" class="block hover:text-blue-400 sidebar-link" data-target="genres"><i class="fas fa-tags mr-2"></i>Thể loại</a>
+        <a href="member.html" class="block hover:text-blue-400 sidebar-link" data-target="manage-membership"><i class="fas fa-tv mr-2"></i>Quản lý hội viên</a>
+        <a href="manageaccount.html" class="block hover:text-blue-400 sidebar-link" data-target="accounts"><i class="fas fa-users mr-2"></i>Tài khoản</a>
+      </nav>
+    </aside>
+
+
+
+    <!-- Main content -->
+    <main class="flex-1 overflow-y-auto p-10">
+        <!-- Table for Single Movies -->
+        <div class="bg-gray-800 p-6 rounded-xl shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Danh sách phim lẻ</h2>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-gray-700 text-white">
+                <tr>
+                  <th class="py-2 px-4 text-left">Poster</th>
+                  <th class="py-2 px-4 text-left">Tên phim</th>
+                  <th class="py-2 px-4 text-left">Thể loại</th>
+                  <th class="py-2 px-4 text-left">Quốc gia</th>
+                  <th class="py-2 px-4 text-left">Lượt xem</th>
+                  <th class="py-2 px-4 text-left">Hành động</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-600">
+                <!-- Sample Row 1 -->
+                <tr>
+                  <td class="py-2 px-4">
+                    <img src="https://via.placeholder.com/50x75" alt="Poster" class="w-16 h-24 object-cover rounded">
+                  </td>
+                  <td class="py-2 px-4">Inception</td>
+                  <td class="py-2 px-4">Hành động, Khoa học viễn tưởng</td>
+                  <td class="py-2 px-4">Mỹ</td>
+                  <td class="py-2 px-4">2,500,000</td>
+                  <td class="py-2 px-4">
+                    <button class="text-yellow-400 hover:underline mr-2">Sửa</button>
+                    <button class="text-red-400 hover:underline">Xoá</button>
+                  </td>
+                </tr>
+                <!-- Sample Row 2 -->
+                <tr>
+                  <td class="py-2 px-4">
+                    <img src="https://via.placeholder.com/50x75" alt="Poster" class="w-16 h-24 object-cover rounded">
+                  </td>
+                  <td class="py-2 px-4">The Shawshank Redemption</td>
+                  <td class="py-2 px-4">Drama</td>
+                  <td class="py-2 px-4">Mỹ</td>
+                  <td class="py-2 px-4">1,800,000</td>
+                  <td class="py-2 px-4">
+                   <a href="editsinglemovie.html" class="text-yellow-400 hover:underline mr-2">Sửa</a>
+                    <button class="text-red-400 hover:underline">Xoá</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  <!-- Section Switching Script + Dropdown -->
+  <script>
+function toggleDropdown() {
+  const dropdown = document.getElementById('movie-dropdown');
+  const icon = document.getElementById('dropdown-icon');
+  dropdown.classList.toggle('hidden');
+  icon.classList.toggle('rotate-180');
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('collapsed');
+}
+  </script>
+  <Script src="js/highlight.js"></Script>
+</body>
+</html>
