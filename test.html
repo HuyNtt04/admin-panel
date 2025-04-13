@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chọn Thể Loại</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-900 text-white p-10 font-sans">
+
+  <!-- Thể loại (giao diện chính) -->
+  <div class="max-w-xl mx-auto">
+    <label class="block mb-2 font-semibold text-white">Thể loại</label>
+    <input id="genreInputDisplay" type="text" readonly
+      class="w-full p-3 rounded bg-gray-700 text-white placeholder:text-gray-400 cursor-pointer"
+      placeholder="Nhấn để thêm thể loại..." onclick="openGenrePopup()" />
+  </div>
+
+  <!-- Popup -->
+  <div id="genrePopup" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center">
+    <div class="bg-gray-800 p-6 rounded-xl w-full max-w-lg shadow-xl">
+      <h2 class="text-lg font-semibold mb-4">Thêm thể loại phim</h2>
+
+      <div class="flex gap-2 mb-4">
+        <input id="genreInput" type="text"
+          class="flex-1 p-2 rounded bg-gray-700 text-white placeholder:text-gray-400"
+          placeholder="Nhập thể loại (VD: Hành động)" />
+        <button onclick="addGenre()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Thêm</button>
+      </div>
+
+      <div id="genreTags" class="flex flex-wrap gap-2 mb-6">
+        <!-- Tag sẽ render tại đây -->
+      </div>
+
+      <div class="text-right space-x-2">
+        <button onclick="closeGenrePopup()" class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded">Hủy</button>
+        <button onclick="saveGenres()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Lưu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    let selectedGenres = [];
+
+    function openGenrePopup() {
+      document.getElementById("genrePopup").classList.remove("hidden");
+      updateGenreTags();
+    }
+
+    function closeGenrePopup() {
+      document.getElementById("genrePopup").classList.add("hidden");
+    }
+
+    function addGenre() {
+      const input = document.getElementById("genreInput");
+      const value = input.value.trim();
+      if (value && !selectedGenres.includes(value)) {
+        selectedGenres.push(value);
+        input.value = "";
+        updateGenreTags();
+      }
+    }
+
+    function removeGenre(index) {
+      selectedGenres.splice(index, 1);
+      updateGenreTags();
+    }
+
+    function toggleHighlight(index) {
+      const tag = document.getElementById(`genre-tag-${index}`);
+      tag.classList.toggle("bg-blue-600");
+      tag.classList.toggle("bg-gray-600");
+    }
+
+    function updateGenreTags() {
+      const container = document.getElementById("genreTags");
+      container.innerHTML = "";
+      selectedGenres.forEach((genre, index) => {
+        const tag = document.createElement("div");
+        tag.id = `genre-tag-${index}`;
+        tag.className = "bg-gray-600 text-white px-3 py-1 rounded-full flex items-center gap-2 text-sm cursor-pointer hover:bg-blue-500 transition";
+        tag.innerHTML = `<span>${genre}</span>
+          <button onclick="removeGenre(${index})" class="text-red-300 hover:text-red-500">&times;</button>`;
+        tag.onclick = (e) => {
+          if (e.target.tagName !== "BUTTON") toggleHighlight(index);
+        };
+        container.appendChild(tag);
+      });
+    }
+
+    function saveGenres() {
+      const display = document.getElementById("genreInputDisplay");
+      display.value = "Thể loại: " + selectedGenres.join(", ");
+      closeGenrePopup();
+    }
+  </script>
+
+</body>
+</html>

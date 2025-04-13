@@ -6,6 +6,7 @@
   <title>Dashboard Quản Lý Phim</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -19,6 +20,8 @@
     }
   </script>
   <style>
+   .toggle-switch:checked + .toggle-line { background-color: #28d318; }
+   .toggle-switch:checked + .toggle-line .toggle-dot { transform: translateX(100%); }
     .fade-in {
       animation: fadeIn 0.5s ease-in-out;
     }
@@ -61,74 +64,92 @@
     </aside>
 
 
-
     <!-- Main content -->
     <main class="flex-1 overflow-y-auto p-10">
-        <!-- Table for Movie Series -->
-        <div class="bg-gray-800 p-6 rounded-xl shadow-md">
-          <h2 class="text-xl font-semibold mb-4">Danh sách phim bộ</h2>
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-sm">
-              <thead class="bg-gray-700 text-white">
-                <tr>
-                  <th class="py-2 px-4 text-left">Poster</th>
-                  <th class="py-2 px-4 text-left">Tên phim</th>
-                  <th class="py-2 px-4 text-left">Thể loại</th>
-                  <th class="py-2 px-4 text-left">Quốc gia</th>
-                  <th class="py-2 px-4 text-left">Số tập</th>
-                  <th class="py-2 px-4 text-left">Lượt xem</th>
-                  <th class="py-2 px-4 text-left">Hành động</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-600">
-                <!-- Sample Row 1 -->
-                <tr>
-                  <td class="py-2 px-4">
-                    <img src="https://via.placeholder.com/50x75" alt="Poster" class="w-16 h-24 object-cover rounded">
-                  </td>
-                  <td class="py-2 px-4">Stranger Things</td>
-                  <td class="py-2 px-4">Kinh dị, Khoa học viễn tưởng</td>
-                  <td class="py-2 px-4">Mỹ</td>
-                  <td class="py-2 px-4">25</td>
-                  <td class="py-2 px-4">1,000,000</td>
-                  <td class="py-2 px-4">
-                    <button class="text-yellow-400 hover:underline mr-2">Sửa</button>
-                    <button class="text-red-400 hover:underline">Xoá</button>
-                  </td>
-                </tr>
-                <!-- Sample Row 2 -->
-                <tr>
-                  <td class="py-2 px-4">
-                    <img src="https://via.placeholder.com/50x75" alt="Poster" class="w-16 h-24 object-cover rounded">
-                  </td>
-                  <td class="py-2 px-4">The Witcher</td>
-                  <td class="py-2 px-4">Hành động, Phiêu lưu</td>
-                  <td class="py-2 px-4">Ba Lan</td>
-                  <td class="py-2 px-4">16</td>
-                  <td class="py-2 px-4">800,000</td>
-                  <td class="py-2 px-4">
-                    <a href="editsinglemovie.html" class="text-yellow-400 hover:underline mr-2">Sửa</a>
-                    <button class="text-red-400 hover:underline">Xoá</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+      <div class="bg-gray-800 p-6 rounded-xl shadow-md">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold">Danh sách phim bộ</h2>
+          <div class="flex gap-4 items-center">
+            <input id="searchInput" onkeyup="filterTable()" type="text" placeholder="Tìm kiếm phim..." class="p-2 rounded bg-gray-700 text-white placeholder:text-gray-400" />
+            <a href="edittvseries.html" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-sm">+ Thêm phim</a>
           </div>
         </div>
-      </div>
-  <!-- Section Switching Script + Dropdown -->
-  <script>
-function toggleDropdown() {
-  const dropdown = document.getElementById('movie-dropdown');
-  const icon = document.getElementById('dropdown-icon');
-  dropdown.classList.toggle('hidden');
-  icon.classList.toggle('rotate-180');
-}
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead class="bg-gray-700 text-white">
+              <tr>
+                <th class="py-2 px-4 text-left">ID</th>
+                <th class="py-2 px-4 text-left">Poster</th>
+                <th class="py-2 px-4 text-left">Tên phim</th>
+                <th class="py-2 px-4 text-left">Thể loại</th>
+                <th class="py-2 px-4 text-left">Quốc gia</th>
+                <th class="py-2 px-4 text-left">Trang chính</th>
+                <th class="py-2 px-4 text-left">Top 10</th>
+                <th class="py-2 px-4 text-left">Slider</th>
+                <th class="py-2 px-4 text-left">Status</th>
+                <th class="py-2 px-4 text-left">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="movieTable" class="divide-y divide-gray-600">
+              <tr>
+                <td class="py-2 px-4">1</td>
+                <td class="py-2 px-4"><img src="https://via.placeholder.com/50x75" class="w-16 h-24 object-cover rounded"></td>
+                <td class="py-2 px-4">Inception</td>
+                <td class="py-2 px-4">Hành động, Khoa học viễn tưởng</td>
+                <td class="py-2 px-4">Mỹ</td>
+                <td class="py-2 px-4"><input type="checkbox" class="toggle-switch hidden" id="main1"><label for="main1" class="toggle-line inline-flex w-10 h-5 bg-gray-600 rounded-full cursor-pointer"><span class="toggle-dot w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"></span></label></td>
+                <td class="py-2 px-4"><input type="checkbox" class="toggle-switch hidden" id="top101"><label for="top101" class="toggle-line inline-flex w-10 h-5 bg-gray-600 rounded-full cursor-pointer"><span class="toggle-dot w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"></span></label></td>
+                <td class="py-2 px-4"><input type="checkbox" class="toggle-switch hidden" id="slider1"><label for="slider1" class="toggle-line inline-flex w-10 h-5 bg-gray-600 rounded-full cursor-pointer"><span class="toggle-dot w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"></span></label></td>
+                <td class="py-2 px-4"><input type="checkbox" class="toggle-switch hidden" id="status1" checked><label for="status1" class="toggle-line inline-flex w-10 h-5 bg-gray-600 rounded-full cursor-pointer"><span class="toggle-dot w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"></span></label></td>
+                <td class="py-2 px-4">
+                  <a href="edittvseries.html" class="text-yellow-400 hover:underline mr-2">Sửa</a>
+                  <button class="text-red-400 hover:underline">Xoá</button>
+                </td>
+              </tr>
+            </tbody>
 
-function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  sidebar.classList.toggle('collapsed');
-}
+            <tbody id="movieTable" class="divide-y divide-gray-600">
+              <tr>
+                <td class="py-2 px-4">2</td>
+                <td class="py-2 px-4"><img src="https://via.placeholder.com/50x75" class="w-16 h-24 object-cover rounded"></td>
+                <td class="py-2 px-4">Pokemon</td>
+                <td class="py-2 px-4">Hành động, Khoa học viễn tưởng</td>
+                <td class="py-2 px-4">Mỹ</td>
+                <td class="py-2 px-4"><input type="checkbox" class="toggle-switch hidden" id="main2"><label for="main2" class="toggle-line inline-flex w-10 h-5 bg-gray-600 rounded-full cursor-pointer"><span class="toggle-dot w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"></span></label></td>
+                <td class="py-2 px-4"><input type="checkbox" class="toggle-switch hidden" id="top102"><label for="top102" class="toggle-line inline-flex w-10 h-5 bg-gray-600 rounded-full cursor-pointer"><span class="toggle-dot w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"></span></label></td>
+                <td class="py-2 px-4"><input type="checkbox" class="toggle-switch hidden" id="slider2"><label for="slider2" class="toggle-line inline-flex w-10 h-5 bg-gray-600 rounded-full cursor-pointer"><span class="toggle-dot w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"></span></label></td>
+                <td class="py-2 px-4"><input type="checkbox" class="toggle-switch hidden" id="status2" checked><label for="status2" class="toggle-line inline-flex w-10 h-5 bg-gray-600 rounded-full cursor-pointer"><span class="toggle-dot w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"></span></label></td>
+                <td class="py-2 px-4">
+                  <a href="edittvseries.html" class="text-yellow-400 hover:underline mr-2">Sửa</a>
+                  <button class="text-red-400 hover:underline">Xoá</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function toggleDropdown() {
+      const dropdown = document.getElementById('movie-dropdown');
+      const icon = document.getElementById('dropdown-icon');
+      dropdown.classList.toggle('hidden');
+      icon.classList.toggle('rotate-180');
+    }
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('collapsed');
+    }
+    function filterTable() {
+      const keyword = document.getElementById("searchInput").value.toLowerCase();
+      const rows = document.querySelectorAll("#movieTable tr");
+      rows.forEach(row => {
+        const title = row.cells[2]?.innerText.toLowerCase();
+        row.style.display = title.includes(keyword) ? "" : "none";
+      });
+    }
   </script>
   <Script src="js/highlight.js"></Script>
 </body>
